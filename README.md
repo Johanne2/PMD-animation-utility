@@ -12,7 +12,7 @@ First, get familiar with the single sheet format used by PMDO and how to use the
 
 Before you can use the script, you need to have python installed on your computer; older versions may not work, so check that your installation is not too ancient. No code editor is needed (since you can edit the file with notepad etc.), but using one is highly recommended as it will help you avoid formatting errors.
 
-Next, take a look at the examples provided in this repository; you can play around with these to get a hang of how everything works. The top level script is an empty template that is there mostly just for the sake of formality. Even when you're starting a completely new project, it is easier to start with an existing file and just modify it.
+Next, take a look at the examples provided in this repository; you can play around with these to get a hang of how everything works. The top level script is an empty template that is there mostly for the sake of formality. Even when you're starting a completely new project, it is easier to start with an existing file and just modify it.
 
 If you are creating eight directional animations, the first 5 (for mirrored sprites) or 8 (for non mirrored sprites) rows of the spritesheet should be reserved for the different orientations, ordered clockwise starting from south. The script includes explanations for how the animation definitions should be formatted.
 
