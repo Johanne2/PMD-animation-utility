@@ -1,14 +1,14 @@
 ### What is this?
-PMD animation utility is a python script that together with Pokémon mystery dungeons origins dev mode can be used to easily create animations for Pokémon mystery dungeon overworld sprites. With the script, it is possible to create a complete set of animations from scratch with minimal effort: 
+PMD animation utility is a python script that together with Pokémon Mystery Dungeons Origins dev mode can be used to easily create animations for Pokémon mystery dungeon overworld sprites. With the script, it is possible to create a complete set of animations from scratch with minimal effort: 
 
 * When creating eight-directional animations, you only need to provide the animation for one direction; the rest can be generated automatically.
 * The animations "Double", "Charge", "Rotate" and "Swing" can be flexibly generated from a template.
-* The format used is much less verbose than the XML one, and most animations take only few lines to define.
+* The format used is much less verbose than the XML one, and most animations take only a few lines to define.
 
 **Note, you do not need to know how to program in python to use this.**
 
 ### How do I use this?
-First, get famliar with the single sheet format used by PMDO and how to use the dev mode to import sprites. The PMDO wiki is useful for this, and there is also a guide on the SkyTemple discord spriting-faq channel (the one for creating overworld sprites).
+First, get familiar with the single sheet format used by PMDO and how to use the dev mode to import sprites. The PMDO wiki is useful for this, and there is also a guide on the SkyTemple discord spriting-faq channel (the one for creating overworld sprites).
 
 Before you can use the script, you need to have python installed on your computer; older versions may not work, so check that your installation is not too ancient. No code editor is needed (since you can edit the file with notepad etc.), but using one is highly recommended as it will help you avoid formatting errors.
 
