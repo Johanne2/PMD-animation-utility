@@ -16,7 +16,7 @@ Before you can use the script, you need to have python installed on your compute
 
 Next, take a look at the examples provided in this repository; you can play around with these to get a hang of how everything works. The top level script is an empty template that is there mostly for the sake of formality. Even when you're starting a completely new project, it is easier to start with an existing file and just modify it.
 
-If you are creating eight directional animations, the first 5 (for mirrored sprites) or 8 (for non mirrored sprites) rows of the spritesheet should be reserved for the different orientations, ordered clockwise starting from south. The script includes explanations for how the animation definitions should be formatted.
+If you are creating eight-directional animations, the first 5 (for mirrored sprites) or 8 (for non mirrored sprites) rows of the spritesheet should be reserved for the different orientations, ordered clockwise starting from south. The script includes explanations for how the animation definitions should be formatted.
 
 Then, when you are ready to generate the XML file, simply run the script. The ideal workflow is to place the XML\_generator.py file in the same folder as your spritesheet and offsets as you can then quickly re-import the newly generated animations after running the script.
 
