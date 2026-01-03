@@ -74,7 +74,7 @@ animations = [
 
     ("Charge", 11, [5], {"HitFrame":5, "ReturnFrame": 9, "GenerateAnimation":"Charge"}),
 
-    ("Rotate", 12, [5], {"GenerateAnimation": "Rotate", "HitFrame":8}),
+    ("Rotate", 12, [0], {"GenerateAnimation": "Rotate", "HitFrame":8}),
 
     #When generating omnidirectional animations, large indexes for mirrored animations will automatically be interpreted
     #with the correct rotation. Indexes will also roll over if necessary.
