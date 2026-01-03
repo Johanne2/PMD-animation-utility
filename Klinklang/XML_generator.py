@@ -85,9 +85,10 @@ AUTO_SWING_DISPLACEMENTS = [(0,0), (8,3), (10,10), (8,19), (0,21), (-8,19), (-10
 #  Code for generating the animations #
 #######################################
 GLOBAL_MIRROR_KEY = {0:0, 1:1, 2:2, 3:3, 4:4, 5:3, 6:2, 7:1}
-OPTIONAL_ARGUMENTS = ["RushFrame", "HitFrame", "ReturnFrame", "CopyOf", "Omnidirectional", "GenerateAnimation", "StartingIndex"]
+VALID_OPTIONAL_ARGUMENTS = ["RushFrame", "HitFrame", "ReturnFrame", "CopyOf", "Omnidirectional", "GenerateAnimation", "StartingIndex"]
+ROTATION_DIRECTIONS = [(0,1), (-1,1),(-1,0),(-1,-1),(0,-1),(1,-1),(1,0),(1,1)]  #Ordered clockwise starting from south.
 
-#Vector operations
+#Vector operations.
 def vec_add(vec1 : tuple, vec2 : tuple):
     return (vec1[0] + vec2[0], vec1[1] + vec2[1])
 
@@ -97,12 +98,11 @@ def vec_scalar(number : int, vec : tuple):
 def flip_x(vec : tuple):
     return (vec[0] * -1, vec[1])
 
-#Function for generating the omnidirectional offsets
+#A function for generating the omnidirectional offsets.
 def vec_transform(vec : tuple, transform_index : int):
-    transform_list = ((0,1), (-1,1),(-1,0),(-1,-1),(0,-1),(1,-1),(1,0),(1,1))
-    return vec_add(vec_scalar(vec[0],transform_list[(transform_index+6) % 8]), vec_scalar(vec[1], transform_list[transform_index]))
+    return vec_add(vec_scalar(vec[0], ROTATION_DIRECTIONS[(transform_index+6) % 8]), vec_scalar(vec[1], ROTATION_DIRECTIONS[transform_index]))
 
-#Function for handling the inputted data
+#A function for handling the inputted data.
 def extract_arguments(frame):
         frame_index = frame[0]
         frame_duration = frame[1]
@@ -111,24 +111,25 @@ def extract_arguments(frame):
         is_mirrored = False
 
         if len(frame) > 2:
-            second_argument = frame[2]
-            if type(second_argument) == tuple: frame_offset = second_argument
-            if type(second_argument) == bool: is_mirrored = second_argument
+            third_argument = frame[2]
+            if type(third_argument) == tuple: frame_offset = third_argument
+            if type(third_argument) == bool: is_mirrored = third_argument
 
             if len(frame) > 3:
-                third_argument = frame[3]
-                if type(third_argument) == tuple: shadow_offset =  third_argument
-                if type(third_argument) == bool: is_mirrored = third_argument
+                fourth_argument = frame[3]
+                if type(fourth_argument) == tuple: shadow_offset =  fourth_argument
+                if type(fourth_argument) == bool: is_mirrored = fourth_argument
 
                 if len(frame) > 4:
-                    fourth_argument = frame[4]
-                    if type(fourth_argument) == bool: is_mirrored = fourth_argument
+                    fifth_argument = frame[4]
+                    if type(fifth_argument) == bool: is_mirrored = fifth_argument
                     
         return (frame_index, frame_duration, frame_offset, shadow_offset, is_mirrored)
 
 #Functions for generating animations.
+
 def generate_omnidirectional_animation(base_animation, omni_displacements):
-    anims = []
+    animation_data = []
     for i in range(8):
                 animation = []
                 for j in range(len(base_animation)):
@@ -150,11 +151,11 @@ def generate_omnidirectional_animation(base_animation, omni_displacements):
                         vec_add(shadow_offset, vec_transform(omni_displacements[j][1], i)),
                         is_mirrored
                     ])
-                anims.append(animation)
-    return anims
+                animation_data.append(animation)
+    return animation_data
 
 def generate_rotate_animation(starting_index):
-    anims = []
+    animation_data = []
     for i in range(8):
         anim = []
         for j in range(9):
@@ -164,49 +165,49 @@ def generate_rotate_animation(starting_index):
                 anim.append([starting_index + INDEX_OFFSET * rotation, 2, True])
             else:
                 anim.append([starting_index + INDEX_OFFSET * rotation, 2])
-        anims.append(anim)
-    return anims
+        animation_data.append(anim)
+    return animation_data
 
 def generate_double_animation(starting_index):
-    anims = generate_omnidirectional_animation(
+    animation_data = generate_omnidirectional_animation(
         [[starting_index,2], [starting_index,2], [starting_index,2], [starting_index,2], [starting_index,2], [starting_index,2], [starting_index,3], [starting_index,3],
          [starting_index,3], [starting_index,2], [starting_index,3], [starting_index,2], [starting_index,2], [starting_index,2], [starting_index,2], [starting_index,2]],
         [[(0,0), (0,0)], [(6,0),(6,0)], [(-6,0),(-6,0)], [(10,0),(10,0)], [(-10,0),(-10,0)], [(12,0),(12,0)], [(-12,0), (-12,0)], [(13,0),(13,0)], [(-13,0),(-13,0)],
          [(12,0),(12,0)], [(-12,0), (-12,0)], [(10,0),(10,0)], [(-10,0),(-10,0)], [(6,0),(6,0)], [(-6,0),(-6,0)], [(0,0), (0,0)]]
     )
-    return anims
+    return animation_data
 
 def generate_swing_animation(starting_index):
-    swing = generate_rotate_animation(starting_index)
+    animation_data = generate_rotate_animation(starting_index)
     for i in range(8):
-        swing[i][1][1] = 1
-        swing[i][4][1] = 3
-        swing[i][7][1] = 1
-        swing[i][8][1] = 1
+        animation_data[i][1][1] = 1
+        animation_data[i][4][1] = 3
+        animation_data[i][7][1] = 1
+        animation_data[i][8][1] = 1
     for i in (0,4,5,6,7):
         for k in range(9):
             rotated = vec_transform(AUTO_SWING_DISPLACEMENTS[k], i)
-            swing[i][k].insert(2, rotated)
-            swing[i][k].insert(2, rotated)
+            animation_data[i][k].insert(2, rotated)
+            animation_data[i][k].insert(2, rotated)
     for i in (1,2,3):
-        swing[i].reverse()
+        animation_data[i].reverse()
         for k in range(9):
-            mirrored = flip_x(swing[8-i][k][2])
-            swing[i][k].insert(2, mirrored)
-            swing[i][k].insert(2, mirrored)
-    return swing
+            mirrored = flip_x(animation_data[8-i][k][2])
+            animation_data[i][k].insert(2, mirrored)
+            animation_data[i][k].insert(2, mirrored)
+    return animation_data
 
 def generate_charge_animation(starting_index):
-    anims = generate_omnidirectional_animation(
+    animation_data = generate_omnidirectional_animation(
     [[starting_index,2], [starting_index,2], [starting_index,2], [starting_index,2], [starting_index,2],
      [starting_index,2], [starting_index,2], [starting_index,2], [starting_index,2], [starting_index,2]], 
     [[(0,0), (0,0)],[(-1,0), (-1,0)],[(0,0), (0,0)],[(-1,0), (-1,0)],[(0,0), (0,0)],[(-1,0), (-1,0)],
      [(0,0), (0,0)],[(-1,0), (-1,0)],[(0,0), (0,0)],[(-1,0), (-1,0)]]
     ) 
-    return anims
+    return animation_data
 
-def increment_index(directions, increment):
-        for direction in directions:
+def increment_index(animation_data, increment):
+        for direction in animation_data:
             for frame in direction:
                 frame[0] += increment
 
@@ -215,7 +216,7 @@ def increment_index(directions, increment):
 ####################################
 with open("FrameData.xml", "w") as file:
     file.write('<?xml version="1.0"?> \n <AnimData />')
-
+    
 animations.sort(key = lambda anim : anim[1])
 
 #Create the XML tree
@@ -233,10 +234,11 @@ for animation in animations:
     XML.SubElement(anim, "Name").text = str(animation_name)
     XML.SubElement(anim, "Index").text = str(animation_index)
 
+    #Process optional arguments.
     if len(animation) == 4:
         optional_arguments = animation[3]
         for argument in optional_arguments:
-            if argument not in OPTIONAL_ARGUMENTS:
+            if argument not in VALID_OPTIONAL_ARGUMENTS:
                 print(f"The animation '{animation_index}' contains an invalid argument '{argument}'. Check for misspellings.")
 
         if "CopyOf" in optional_arguments:
@@ -247,7 +249,7 @@ for animation in animations:
             if argument in ("RushFrame", "HitFrame", "ReturnFrame"):
                 XML.SubElement(anim, argument).text = str(value)
 
-        #Generate the animation from a template when specified
+        #Generate the animation from a template when specified.
         preset = optional_arguments.get("GenerateAnimation")
         if preset == "Double":
             start_index = directions.pop()
@@ -266,7 +268,7 @@ for animation in animations:
             directions += generate_charge_animation(start_index)
         
 
-        #Generate the other directions when specified
+        #Generate the other directions when specified.
         if bool(optional_arguments.get("Omnidirectional")):
             omni_displacements = [[(0,0),(0,0)]] * len(directions[0])
             if len(directions) == 2:
@@ -281,7 +283,6 @@ for animation in animations:
         if "StartingIndex" in optional_arguments:
             increment_index(directions, optional_arguments["StartingIndex"])
         
-
     sequences = XML.SubElement(anim, "Sequences")
 
     for direction in directions:
