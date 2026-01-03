@@ -8,7 +8,7 @@ from pathlib import Path
 #######################################
 
 #comment block will be replaced. By default, the string "#  Code for generating the animations #" is used to specify
-#the line after which the updated code will be inserted. Remove this from the specific files which you don't want to be effected.
+#the line after which the updated code will be inserted. Remove this from the specific files which you don't want to be affected.
 
 REPLACE_STARTING_FROM = "#  Code for generating the animations #"
 
