@@ -20,7 +20,7 @@ If you are creating eight-directional animations, the first 5 (for mirrored spri
 
 Then, when you are ready to generate the XML file, simply run the script. The ideal workflow is to place the XML\_generator.py file in the same folder as your spritesheet and offsets as you can then quickly re-import the newly generated animations after running the script.
 
-You can also directly view the animations you just created using [mdframeedit](https://github.com/caffeinepills/mdframeedit/). Although the frame editors animation editing capabilities don't contribute to this workflow, being able to easily slow down animations and view the offsets can come in very handy.
+You can also directly view the animations you just created using [mdframeedit](https://github.com/caffeinepills/mdframeedit/). Although the frame editors animation editing capabilities don't contribute to this workflow, the ability to easily slow down animations and view the offsets can come in very handy.
 
 ### What if I want to add animations to an existing XML file?
 
