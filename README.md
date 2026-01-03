@@ -1,24 +1,26 @@
 ### What is this?
 
-PMD animation utility is a python script that together with Pokémon Mystery Dungeons: Origins dev mode can be used to easily create animations for Pokémon Mystery Dungeon overworld sprites.
+PMD animation utility is a Python script that together with Pokémon Mystery Dungeons: Origins dev mode can be used to easily create animations for Pokémon Mystery Dungeon overworld sprites.
 
 * When creating eight-directional animations, you only need to provide the animation for one direction; the rest can be generated automatically.
 * The animations "Double", "Charge", "Rotate" and "Swing" can be flexibly generated from a template.
 * The animation definitions are less verbose than the XML ones they are converted to, and most animations take only a few lines to define.
 
-**Note, you do not need to know how to program in python to use this.**
+**Note, you do not need to know how to program in Python to use this.**
 
 ### How do I use this?
 
 First, get familiar with the single sheet format used by PMDO and how to use the dev mode to import sprites. The PMDO wiki is useful for this, and there is also a guide on the SkyTemple discord spriting-faq channel (the one for creating overworld sprites).
 
-Before you can use the script, you need to have python installed on your computer; older versions may not work, so check that your installation is not too ancient. No code editor is needed (since you can edit the file with notepad etc.), but using one is highly recommended as it will help you avoid formatting errors.
+Before you can use the script, you need to have Python installed on your computer; older versions may not work, so check that your installation is not too ancient. No code editor is needed (since you can edit the file with notepad etc.), but using one is highly recommended as it will help you avoid formatting errors.
 
 Next, take a look at the examples provided in this repository; you can play around with these to get a hang of how everything works. The top level script is an empty template that is there mostly for the sake of formality. Even when you're starting a completely new project, it is easier to start with an existing file and just modify it.
 
 If you are creating eight-directional animations, the first 5 (for mirrored sprites) or 8 (for non mirrored sprites) rows of the spritesheet should be reserved for the different orientations, ordered clockwise starting from south. The script includes explanations for how the animation definitions themselves should be formatted.
 
 Then, when you are ready to generate the XML file, simply run the script. The ideal workflow is to place the XML\_generator.py file in the same folder as your spritesheet and offsets as you can then quickly re-import the newly generated animations after running the script.
+
+You can also directly view the animations you just created using [mdframeedit](https://github.com/caffeinepills/mdframeedit/). Although the frame editors animation editing capabilities don't contribute to this workflow, being able to easily slow down animations and view the offsets can come in very handy.
 
 ### What if I want to add animations to an existing XML file?
 
