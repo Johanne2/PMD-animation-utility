@@ -4,7 +4,7 @@ PMD animation utility is a python script that together with Pokémon Mystery Dun
 
 * When creating eight-directional animations, you only need to provide the animation for one direction; the rest can be generated automatically.
 * The animations "Double", "Charge", "Rotate" and "Swing" can be flexibly generated from a template.
-* The format used is much less verbose than the XML one, and most animations take only a few lines to define.
+* The animation definitions are less verbose than the XML ones they are converted to, and most animations take only a few lines to define.
 
 **Note, you do not need to know how to program in python to use this.**
 
