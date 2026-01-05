@@ -196,6 +196,8 @@ def generate_swing_animation(starting_index):
             animation_data[i][k].insert(2, rotated)
     for i in (1,2,3):
         animation_data[i].reverse()
+        animation_data[i][0][1] = 2
+        animation_data[i][-1][1] = 1
         for k in range(9):
             mirrored = flip_x(animation_data[8-i][k][2])
             animation_data[i][k].insert(2, mirrored)
