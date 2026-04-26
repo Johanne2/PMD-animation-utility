@@ -13,7 +13,7 @@ BASE_SPRITE_OFFSET = (0,-8) #Offset applied to all sprites in the spritesheet.
 BASE_SHADOW_OFFSET = (0,4)  #Offset of the shadow.
 
 #Each animation is built up from a sequence of blocks representing frames formatted as follows:
-#[spritesheet index, duration (in frames), additional offset (in pixels, optional), additional shadow offset (in pixels, optional), is mirrored (boolean, optional)]
+#[spritesheet index, duration, additional offset (optional), additional shadow offset (optional), is mirrored (optional)]
 
 #Directional animations are given in a clockwise order starting from south.
 #The general format for an animation is:
@@ -60,7 +60,7 @@ animations = [
 
     ("Hurt", 6, [
         [[6,2,(0,-4)],[6,8,(0,-4)]],
-        [[(0,-5),(0,-3)], [(0,-4),(0,-2)]]
+        [[(0,-4),(0,-2)], [(0,-5),(0,-3)]]
     ], {"Omnidirectional":True}),
 
     ("Swing", 8, [3], {"HitFrame":5, "ReturnFrame":5, "GenerateAnimation":"Swing"}),
@@ -76,11 +76,23 @@ animations = [
 
     ("Rotate", 12, [0], {"GenerateAnimation": "Rotate", "HitFrame":8}),
 
+    #Templates can also be used to make alternate copies of the animation.
+    #For example, if you want to see that all directions are in proportion,
+    #you can create rotation previews inside this animation workflow. 
+    #("Special0", 13, [1], {"GenerateAnimation": "Rotate", "HitFrame":8}),
+    #("Special1", 14, [2], {"GenerateAnimation": "Rotate", "HitFrame":8}),
+    #("Special2", 15, [3], {"GenerateAnimation": "Rotate", "HitFrame":8}),
+    #("Special3", 16, [4], {"GenerateAnimation": "Rotate", "HitFrame":8}),
+    #("Special4", 17, [5], {"GenerateAnimation": "Rotate", "HitFrame":8}),
+    #("Special5", 18, [6], {"GenerateAnimation": "Rotate", "HitFrame":8}),
+    
     #When generating omnidirectional animations, large indexes for mirrored animations will automatically be interpreted
     #with the correct rotation. Indexes will also roll over if necessary.
     ("TailWhip", 4, [
         [[0,5],[INDEX_OFFSET*7,7],[0,5],[INDEX_OFFSET,7],[0,5]]
-    ], {"Omnidirectional":True, "HitFrame": 2})
+    ], {"Omnidirectional":True, "HitFrame": 2}),
+
+   
 ]
 
 #These are the default displacements for the automatically generated swing animation. Can be adjusted. 
@@ -147,7 +159,8 @@ def generate_omnidirectional_animation(base_animation, omni_displacements):
                         frame_index = frame_column + INDEX_OFFSET * GLOBAL_MIRROR_KEY[frame_rotation]
                         if frame_rotation  in (5,6,7): is_mirrored = not is_mirrored
                     else:
-                        frame_index += INDEX_OFFSET * i % (INDEX_OFFSET*8)
+                        frame_index += INDEX_OFFSET * i
+                        frame_index = frame_index % (INDEX_OFFSET * 8)
 
                     animation.append([
                         frame_index,

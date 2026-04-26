@@ -1,16 +1,16 @@
 ### What is this?
 
-PMD animation utility is a Python script that together with Pokémon Mystery Dungeons: Origins dev mode can be used to easily create animations for Pokémon Mystery Dungeon overworld sprites.
+PMD animation utility is a Python script that together with Pokémon Mystery Dungeons: Origins dev mode can be used to easily create animations for Pokémon Mystery Dungeon character sprites.
 
-* When creating eight-directional animations, you only need to provide the animation for one direction; the rest can be generated automatically.
+* When creating eight-directional animations, you only need to provide the animation for one direction; the rest will be calculated automatically based on your definitions.
 * The animations "Double", "Charge", "Rotate" and "Swing" can be flexibly generated from a template.
 * The animation definitions are less verbose than the XML ones they are converted to, and most animations take only a few lines to define.
 
-**Note, you do not need to know how to program in Python to use this.**
+**Note that you do not need to know how to program in Python to use this.**
 
 ### How do I use this?
 
-First, get familiar with the single sheet format used by PMDO and how to use the dev mode to import sprites. The PMDO wiki is useful for this, and there is also a guide on the SkyTemple discord spriting-faq channel (the one for creating overworld sprites).
+First, get familiar with the single sheet format used by PMDO and how to use the dev mode to import sprites. The PMDO wiki is useful for this, and there is also a guide on the SkyTemple discord spriting-faq channel.
 
 Before you can use the script, you need to have Python installed on your computer; older versions may not work, so check that your installation is not too ancient. No code editor is needed (since you can edit the file with notepad etc.), but using one is highly recommended as it will help you avoid formatting errors.
 
@@ -20,7 +20,7 @@ If you are creating eight-directional animations, the first 5 (for mirrored spri
 
 Then, when you are ready to generate the XML file, simply run the script. The ideal workflow is to place the XML\_generator.py file in the same folder as your spritesheet and offsets as you can then quickly re-import the newly generated animations after running the script.
 
-You can also directly view the animations you just created using [mdframeedit](https://github.com/caffeinepills/mdframeedit/). Although the frame editors animation editing capabilities don't contribute to this workflow, the ability to easily slow down animations and view the offsets can come in very handy.
+You can also directly view the animations you just created using [mdframeedit](https://github.com/caffeinepills/mdframeedit/). Although the frame editor's animation editing capabilities don't contribute to this workflow, it's usually faster to launch than PMDO and gives you more control when viewing the animations.
 
 ### What if I want to add animations to an existing XML file?
 

@@ -9,11 +9,11 @@ SHADOW_SIZE = 1         #Size of the shadow. Possible values are 0,1 and 2.
 INDEX_OFFSET = 13       #Number of columns in your spritesheet.
 GLOBAL_MIRROR = False   #Whether the sprite needs to be mirrored over the vertical axis. 
 
-BASE_SPRITE_OFFSET = (0,-10)  #Offset applied to all sprites in the spritesheet.
-BASE_SHADOW_OFFSET = (0,4)  #Offset of the shadow.
+BASE_SPRITE_OFFSET = (0,-10)    #Offset applied to all sprites in the spritesheet.
+BASE_SHADOW_OFFSET = (0,4)      #Offset of the shadow.
 
 #Each animation is built up from a sequence of blocks representing frames formatted as follows:
-#[spritesheet index, duration (in frames), additional offset (in pixels, optional), additional shadow offset (in pixels, optional), is mirrored (boolean, optional)]
+#[spritesheet index, duration, additional offset (optional), additional shadow offset (optional), is mirrored (optional)]
 
 #Directional animations are given in a clockwise order starting from south.
 #The general format for an animation is:
@@ -60,7 +60,7 @@ animations = [
 
     ("Hurt", 6, [
         [[6,2, (0,-2)],[6,8,(0,-2)]],
-        [[(0,0),(0,-3)], [(0,1),(0,-2)]]
+        [[(0,1),(0,-2)], [(0,0),(0,-3)]]
     ], {"Omnidirectional":True}),
 
     ("Swing", 8, [0], {"HitFrame":5, "ReturnFrame":5, "GenerateAnimation":"Swing"}),
@@ -69,7 +69,7 @@ animations = [
 
     #The hop animation is 24 frames.
     ("Hop", 10, [
-        [ [0,2], [0,1,(0,-5)], [0,1,(0,-11)] ,[1,2,(0,-15)], [2,4,(0,-18)], [3,4,(0,-22)],  [4,4,(0,-24)],  [5,3,(0,-24)],  [5,1,(0,-18)],  [0,2,(0,-6)]],
+        [ [0,2], [0,1,(0,-5)], [0,1,(0,-11)] ,[1,2,(0,-15)], [2,4,(0,-18)], [3,4,(0,-22)],  [4,4,(0,-24)],  [5,3,(0,-24)],  [5,1,(0,-14)],  [0,2, (0,4)]],
     ], {"HitFrame":9, "Omnidirectional":True}),
 
     ("Charge", 11, [0], {"HitFrame":5, "ReturnFrame":9, "GenerateAnimation":"Charge"}),
@@ -141,7 +141,8 @@ def generate_omnidirectional_animation(base_animation, omni_displacements):
                         frame_index = frame_column + INDEX_OFFSET * GLOBAL_MIRROR_KEY[frame_rotation]
                         if frame_rotation  in (5,6,7): is_mirrored = not is_mirrored
                     else:
-                        frame_index += INDEX_OFFSET * i % (INDEX_OFFSET*8)
+                        frame_index += INDEX_OFFSET * i
+                        frame_index = frame_index % (INDEX_OFFSET * 8)
 
                     animation.append([
                         frame_index,

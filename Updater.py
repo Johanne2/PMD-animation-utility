@@ -1,6 +1,6 @@
 from pathlib import Path
 
-#This script will update all instances of the "XML_generator.py" script in the directory tree which it is run.
+#This script will update all instances of the "XML_generator.py" script in the directory tree at which it is run.
 #Animation definitions will not be replaced, but any modified code after the
 
 #######################################
@@ -71,7 +71,8 @@ def generate_omnidirectional_animation(base_animation, omni_displacements):
                         frame_index = frame_column + INDEX_OFFSET * GLOBAL_MIRROR_KEY[frame_rotation]
                         if frame_rotation  in (5,6,7): is_mirrored = not is_mirrored
                     else:
-                        frame_index += INDEX_OFFSET * i % (INDEX_OFFSET*8)
+                        frame_index += INDEX_OFFSET * i
+                        frame_index = frame_index % (INDEX_OFFSET * 8)
 
                     animation.append([
                         frame_index,
@@ -259,7 +260,7 @@ def update_script(script_path : Path):
             generator_script.write(UPDATED_CODE)
             print(f"The script at {script_path} was updated successfully.")
     else:
-        print(f"The script at {script_path} did not contain the line '{REPLACE_STARTING_FROM}' and will thus be skipped.")
+        print(f"The script at {script_path} did not contain the line '{REPLACE_STARTING_FROM}' and was not modified.")
 
 def recursive_update(path : Path):
     for child in path.iterdir():

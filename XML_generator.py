@@ -7,13 +7,13 @@ SPRITE_WIDTH = None     #The width of the squares in your spritesheet.
 SPRITE_HEIGHT = None    #The height of the squares in your spritesheet.
 SHADOW_SIZE = None      #Size of the shadow. Possible values are 0,1 and 2.
 INDEX_OFFSET = None     #Number of columns in your spritesheet.
-GLOBAL_MIRROR = False   #Whether the sprite needs to be mirrored over the vertical axis. 
+GLOBAL_MIRROR = False   #Whether the sprites need to be mirrored over the vertical axis when generating directions. 
 
 BASE_SPRITE_OFFSET = (0,0)  #Offset applied to all sprites in the spritesheet.
 BASE_SHADOW_OFFSET = (0,4)  #Offset of the shadow.
 
 #Each animation is built up from a sequence of blocks representing frames formatted as follows:
-#[spritesheet index, duration (in frames), additional offset (in pixels, optional), additional shadow offset (in pixels, optional), is mirrored (boolean, optional)]
+#[spritesheet index, duration, additional offset (optional), additional shadow offset (optional), is mirrored (optional)]
 
 #Directional animations are given in a clockwise order starting from south.
 #The general format for an animation is:
@@ -105,7 +105,8 @@ def generate_omnidirectional_animation(base_animation, omni_displacements):
                         frame_index = frame_column + INDEX_OFFSET * GLOBAL_MIRROR_KEY[frame_rotation]
                         if frame_rotation  in (5,6,7): is_mirrored = not is_mirrored
                     else:
-                        frame_index += INDEX_OFFSET * i % (INDEX_OFFSET*8)
+                        frame_index += INDEX_OFFSET * i
+                        frame_index = frame_index % (INDEX_OFFSET * 8)
 
                     animation.append([
                         frame_index,
