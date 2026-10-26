@@ -1,6 +1,6 @@
 ### What is this?
 
-PMD animation utility is a Python script that together with Pokémon Mystery Dungeons: Origins dev mode can be used to easily create animations for Pokémon Mystery Dungeon character sprites.
+PMD animation utility is a Python script that together with Pokémon Mystery Dungeon: Origins dev mode can be used to easily create animations for Pokémon Mystery Dungeon character sprites.
 
 * When creating eight-directional animations, you only need to provide the animation for one direction; the rest will be calculated automatically based on your definitions.
 * The animations "Double", "Charge", "Rotate" and "Swing" can be flexibly generated from a template.
@@ -22,13 +22,4 @@ Then, when you are ready to generate the XML file, simply run the script. The id
 
 You can also directly view the animations you just created using [mdframeedit](https://github.com/caffeinepills/mdframeedit/). Although the frame editor's animation editing capabilities don't contribute to this workflow, it's usually faster to launch than PMDO and gives you more control when viewing the animations.
 
-### What if I want to add animations to an existing XML file?
-
-Since the script replaces the whole XML file whenever it is run, animations that only exist in the XML format cannot be directly modified using this script. However, if you want to add new animations, then there does exist a workflow for this.
-
-First, create the animations and offsets in a different folder as if you were creating a completely new sprite. This new spritesheet needs to be the same width as the original, but it can have more rows.
-
-Once you are finished with your work, you need to add the "StartingIndex" argument to all your animations with the given value of the total number of sprites in the spritesheet you are going to modify ((number of rows)\*(number of columns)). If some of your animations were already using "StartingIndex", then just add this value to the existing one.
-
-After you have generated the XML, you can go to the file and copy-paste the animations to your original FrameData.xml file. Finally, append the newly created spritesheet and offsets to the bottom of the originals in your image editing software of choice.
 

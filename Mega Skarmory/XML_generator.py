@@ -93,14 +93,6 @@ animations = [
     ("Charge", 11, [4], {"HitFrame":5, "ReturnFrame":9, "GenerateAnimation":"Charge"}),
 
     ("Rotate", 12, [3], {"GenerateAnimation":"Rotate", "HitFrame":8}),
-
-    #("Special0", 13, [1], {"GenerateAnimation":"Rotate", "HitFrame":8}),
-    #("Special1", 14, [2], {"GenerateAnimation":"Rotate", "HitFrame":8}),
-    #("Special2", 15, [0], {"GenerateAnimation":"Rotate", "HitFrame":8}),
-    #("Special3", 16, [4], {"GenerateAnimation":"Rotate", "HitFrame":8}),
-    #("Special4", 17, [5], {"GenerateAnimation":"Rotate", "HitFrame":8}),
-    #("Special5", 18, [6], {"GenerateAnimation":"Rotate", "HitFrame":8}),
-    #("Special6", 19, [7], {"GenerateAnimation":"Rotate", "HitFrame":8}),
 ]
 
 #These are the default displacements for the automatically generated swing animation. Can be adjusted. 
@@ -110,7 +102,39 @@ AUTO_SWING_DISPLACEMENTS = [(0,0), (8,3), (10,10), (8,19), (0,21), (-8,19), (-10
 #  Code for generating the animations #
 #######################################
 GLOBAL_MIRROR_KEY = {0:0, 1:1, 2:2, 3:3, 4:4, 5:3, 6:2, 7:1}
-OPTIONAL_ARGUMENTS = ["RushFrame", "HitFrame", "ReturnFrame", "CopyOf", "Omnidirectional", "GenerateAnimation", "StartingIndex"]
+OPTIONAL_ARGUMENTS = [
+    "RushFrame",
+    "HitFrame",
+    "ReturnFrame",
+    "CopyOf",
+    "Omnidirectional",
+    "GenerateAnimation",
+    "StartingIndex",
+    "SingleDirectional",
+    "FourDirectional",
+    "UpDown",
+    "LeftRight"
+]
+NEUTRAL_DOWN = None
+NEUTRAL_LEFT = None
+NEUTRAL_UP = None
+NEUTRAL_RIGHT = None
+NEUTRAL_FRAME_KEY = {}
+
+if "NEUTRAL_FRAME_INDEX" in globals():
+    NEUTRAL_DOWN = NEUTRAL_FRAME_INDEX
+    NEUTRAL_LEFT = NEUTRAL_FRAME_INDEX + INDEX_OFFSET * 2
+    NEUTRAL_UP = NEUTRAL_FRAME_INDEX + INDEX_OFFSET * 4
+    if GLOBAL_MIRROR:
+        NEUTRAL_RIGHT = NEUTRAL_LEFT
+    else:
+        NEUTRAL_RIGHT = NEUTRAL_FRAME_INDEX + INDEX_OFFSET * 6
+    NEUTRAL_FRAME_KEY = {
+        "NeutralUp":NEUTRAL_UP,
+        "NeutralDown":NEUTRAL_DOWN,
+        "NeutralLeft":NEUTRAL_LEFT,
+        "NeutralRight":NEUTRAL_RIGHT
+    }
 
 #Vector operations
 def vec_add(vec1 : tuple, vec2 : tuple):
@@ -121,6 +145,9 @@ def vec_scalar(number : int, vec : tuple):
 
 def flip_x(vec : tuple):
     return (vec[0] * -1, vec[1])
+
+def flip_y(vec : tuple):
+    return (vec[0], vec[1] * -1)
 
 #Function for generating the omnidirectional offsets
 def vec_transform(vec : tuple, transform_index : int):
@@ -178,6 +205,15 @@ def generate_omnidirectional_animation(base_animation, omni_displacements):
                 anims.append(animation)
     return anims
 
+#Charge and double have the shaking direction mirrored for SW,W,NW and N
+def adjust_double_charge(anims):
+    for i in range(1,5):
+        anim = anims[i]
+        for frame in anim:
+            frame[2] = flip_x(flip_y(frame[2]))
+            frame[3] = flip_x(flip_y(frame[3]))
+            
+
 def generate_rotate_animation(starting_index):
     anims = []
     for i in range(8):
@@ -199,6 +235,7 @@ def generate_double_animation(starting_index):
         [[(0,0), (0,0)], [(6,0),(6,0)], [(-6,0),(-6,0)], [(10,0),(10,0)], [(-10,0),(-10,0)], [(12,0),(12,0)], [(-12,0), (-12,0)], [(13,0),(13,0)], [(-13,0),(-13,0)],
          [(12,0),(12,0)], [(-12,0), (-12,0)], [(10,0),(10,0)], [(-10,0),(-10,0)], [(6,0),(6,0)], [(-6,0),(-6,0)], [(0,0), (0,0)]]
     )
+    adjust_double_charge(anims)
     return anims
 
 def generate_swing_animation(starting_index):
@@ -223,19 +260,71 @@ def generate_swing_animation(starting_index):
             swing[i][k].insert(2, mirrored)
     return swing
 
-def generate_charge_animation(starting_index):
+
+def generate_charge_animation(first_index, second_index):
+    if not second_index:
+        second_index = first_index
+        
     anims = generate_omnidirectional_animation(
-    [[starting_index,2], [starting_index,2], [starting_index,2], [starting_index,2], [starting_index,2],
-     [starting_index,2], [starting_index,2], [starting_index,2], [starting_index,2], [starting_index,2]], 
+    [[first_index,2], [second_index,2], [first_index,2], [second_index,2], [first_index,2],
+     [second_index,2], [first_index,2], [second_index,2], [first_index,2], [second_index,2]], 
     [[(0,0), (0,0)],[(-1,0), (-1,0)],[(0,0), (0,0)],[(-1,0), (-1,0)],[(0,0), (0,0)],[(-1,0), (-1,0)],
      [(0,0), (0,0)],[(-1,0), (-1,0)],[(0,0), (0,0)],[(-1,0), (-1,0)]]
-    ) 
+    )
+
+    adjust_double_charge(anims)
     return anims
+
 
 def increment_index(directions, increment):
         for direction in directions:
             for frame in direction:
-                frame[0] += increment
+                if type(frame[0]) == int:
+                    frame[0] += increment
+                    
+def generate_single_direction_animation(directions):
+    anim = directions[0]
+    anims = []
+    for _ in range(8):
+        anims.append(anim.copy())
+    return anims
+
+def generate_left_right_animation(directions):
+    left_anim, right_anim = directions
+    anims = []
+    for _ in range(8):
+        anims.append(right_anim.copy())
+    anims[2] = left_anim
+    return anims
+
+def generate_up_down_animation(directions):
+    down_anim, up_anim = directions
+    anims = []
+    for _ in range(8):
+        anims.append(down_anim.copy())
+    anims[4] = up_anim
+    return anims
+
+def generate_four_directional_anims(directions):
+    down_anim, left_anim, up_anim, right_anim = directions
+    anims = [down_anim,
+             left_anim,
+             left_anim.copy(),
+             up_anim,
+             up_anim.copy(),
+             right_anim,
+             right_anim.copy(),
+             down_anim.copy()]
+    return anims
+
+def insert_neutral_frames(directions):
+    for direction in directions:
+        for frame in direction:
+            if frame[0] in NEUTRAL_FRAME_KEY:
+                if frame[0] == "NeutralRight" and GLOBAL_MIRROR:
+                    frame.append(True)
+                frame[0] = NEUTRAL_FRAME_KEY[frame[0]]
+
 
 ####################################
 # Code for generating the XML file #
@@ -290,7 +379,11 @@ for animation in animations:
         
         if preset == "Charge":
             start_index = directions.pop()
-            directions += generate_charge_animation(start_index)
+            second_index = None
+            if directions:
+                second_index = directions.pop()
+                
+            directions += generate_charge_animation(start_index, second_index)
         
 
         #Generate the other directions when specified
